@@ -50,5 +50,5 @@ app.action('new_item_click', async ({ body, ack, say }) => {
   // Start your app
   await app.start(process.env.PORT || 3005);
 
-  console.log('⚡️ Bolt app is running!');
+  console.log('⚡️ TJ is running! At ' + process.env.PORT || 3005);
 })();
