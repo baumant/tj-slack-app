@@ -16,11 +16,11 @@ app.message(/trader joe’*'*s/i, async ({ say }) => {
   await say("OMG I love Trader Joe's!!!");
 });
 
-app.message(/tj’*'*s/i, async ({ message, client }) => {
+app.message(/tj’*'*s/i, async ({ message, context }) => {
   try {
     // Call chat.scheduleMessage with the built-in client
-    const result = await client.reactions.add({
-      token: client.botToken,
+    const result = await app.client.reactions.add({
+      token: context.botToken,
       name: 'eyes',
       channel: message.channel,
       timestamp: message.ts
