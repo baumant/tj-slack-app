@@ -16,6 +16,20 @@ app.message(/trader joe’*'*s/i, async ({ say }) => {
   await say("OMG I love Trader Joe's!!!");
 });
 
+app.message(/tj’*'*s/i, async ({ message, client }) => {
+  try {
+    // Call chat.scheduleMessage with the built-in client
+    const result = await client.reactions.add({
+      channel: message.channel,
+      name: 'eyes',
+      timestamp: message.timestamp
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
+
 // app.message('TJ', async ({ message, say }) => {
 //   // say() sends a message to the channel where the event was triggered
 //   await say({
@@ -50,5 +64,5 @@ app.action('new_item_click', async ({ body, ack, say }) => {
   // Start your app
   await app.start(process.env.PORT || 3005);
 
-  console.log('⚡️ TJ is running! At ' + process.env.PORT || 3005);
+  console.log('⚡️ TJ is running! At ' + process.env.PORT || '3005');
 })();
