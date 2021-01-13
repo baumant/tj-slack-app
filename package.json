@@ -1,0 +1,32 @@
+{
+  "name": "tj-slack-app",
+  "version": "1.0.0",
+  "description": "trader joe's slack app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baumant/tj-slack-app.git"
+  },
+  "keywords": [
+    "trader",
+    "joes",
+    "slack",
+    "slack",
+    "app"
+  ],
+  "author": "baumant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/baumant/tj-slack-app/issues"
+  },
+  "homepage": "https://github.com/baumant/tj-slack-app#readme",
+  "dependencies": {
+    "@slack/bolt": "^2.7.0",
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0"
+  }
+}
