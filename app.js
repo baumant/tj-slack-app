@@ -18,8 +18,8 @@ app.message(/trader joe’*'*s/i, async ({ say }) => {
 
 app.message(/tj’*'*s/i, async ({ message, client }) => {
   try {
-    // Call chat.scheduleMessage with the built-in client
     const result = await client.reactions.add({
+      token: client.botToken,
       channel: message.channel,
       name: 'eyes',
       timestamp: message.timestamp
@@ -54,11 +54,11 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
 
 })
 
-app.action('new_item_click', async ({ body, ack, say }) => {
-  // Acknowledge the action
-  await ack();
-  await say(`<@${body.user.id}> clicked the button`);
-});
+// app.action('new_item_click', async ({ body, ack, say }) => {
+//   // Acknowledge the action
+//   await ack();
+//   await say(`<@${body.user.id}> clicked the button`);
+// });
 
 (async () => {
   // Start your app
