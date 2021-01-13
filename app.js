@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const { App } = require('@slack/bolt');
 const axios = require('axios');
 
-dotenv.config()
+dotenv.config();
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
@@ -18,6 +18,7 @@ app.message(/trader joe’*'*s/i, async ({ say }) => {
 
 app.message(/tj’*'*s/i, async ({ message, client }) => {
   try {
+    // Call chat.scheduleMessage with the built-in client
     const result = await client.reactions.add({
       token: client.botToken,
       name: 'eyes',
@@ -52,13 +53,7 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
     text: `have you tried the ${getItem.title}? https://traderjoes.com${getItem.url}`
   })
 
-})
-
-// app.action('new_item_click', async ({ body, ack, say }) => {
-//   // Acknowledge the action
-//   await ack();
-//   await say(`<@${body.user.id}> clicked the button`);
-// });
+});
 
 (async () => {
   // Start your app
