@@ -20,9 +20,9 @@ app.message(/tj’*'*s/i, async ({ message, client }) => {
   try {
     const result = await client.reactions.add({
       token: client.botToken,
-      channel: message.channel,
       name: 'eyes',
-      timestamp: message.timestamp
+      channel: message.channel,
+      timestamp: message.ts
     });
   }
   catch (error) {
