@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const { App } = require('@slack/bolt');
 const axios = require('axios');
+const { Client } = require('pg');
 
 dotenv.config();
 
@@ -39,17 +40,36 @@ app.message(/tj’*'*s/i, async ({ message, context }) => {
 
 app.message(/what’*'*s good TJ/i, async ({message, say }) => {
 
-  const getItem = await axios.get('https://api.apify.com/v2/datasets/AvdATgp5GXh8DIXar/items?token='+ process.env.APIFY_TOKEN)
-  .then(res => {
-    itemNum = Math.floor(Math.random() * 9);
-    const itemTitle = res.data[itemNum].title;
-    const itemUrl = res.data[itemNum].url;
-
-    return {title: itemTitle, url: itemUrl};
+  // connect to DB and get latest list of new items
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
   });
 
+  await client.connect()
+
+  try {
+    const res = await client.query('SELECT * FROM new_items');
+    console.log('grabbed items from database');
+    itemNum = Math.floor(Math.random() * (res.rows.length - 1));
+    const suggestedItem = res.rows[itemNum];
+
+  } catch (err) {
+    console.log(err.stack);
+  }
+  // const getItem = await axios.get('https://api.apify.com/v2/datasets/AvdATgp5GXh8DIXar/items?token='+ process.env.APIFY_TOKEN)
+  // .then(res => {
+  //   itemNum = Math.floor(Math.random() * 9);
+  //   const itemTitle = res.data[itemNum].title;
+  //   const itemUrl = res.data[itemNum].url;
+
+  //   return {title: itemTitle, url: itemUrl};
+  // });
+
   await say({
-    text: `have you tried the ${getItem.title}? https://traderjoes.com${getItem.url}`
+    text: `have you tried the ${suggestedItem.item_title}? https://traderjoes.com${suggestedItem.item_url}`
   })
 
 });
