@@ -30,6 +30,19 @@ try {
 
 // scrape TJ whats new blog for latest items
 let newItems = [];
+let blocks = [
+  {
+    "type": "section",
+    "text": {
+      "type": "plain_text",
+      "text": "Omg check out this new new from our favorite store!! ✨",
+      "emoji": true
+    }
+  },
+  {
+    "type": "divider"
+  }
+];
 
 let scrapeTJ = await axios("https://www.traderjoes.com/digin/category/What's%20New")
   .then((response) => {
@@ -63,8 +76,35 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
         .then(() => {
           console.log(`added ${item.item_title} to database.`);
         }).catch((error) => console.log(error));
+
+      // push new items to message blocks
+      blocks.push(
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `*<https://www.traderjoes.com${item.item_url}|${item.item_title}>*\n${item.item_blurb}`
+          },
+          "accessory": {
+            "type": "image",
+            "image_url": `https://www.traderjoes.com${item.item_img_url}`,
+            "alt_text": item.item_title
+          }
+        },
+        {
+          "type": "divider"
+        }
+      );
     }
   }
+
+  await axios.post('https://hooks.slack.com/services/T8DSPJ45Q/B01JS5JDNF6/' + process.env.WEBHOOK_SECRET, { "blocks": blocks })
+    .then(function (response) {
+      console.log(response.status, 'posted new item to #lunch');
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
 } else {
   console.log('no new items found.');
