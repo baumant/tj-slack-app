@@ -18,7 +18,6 @@ app.message(/trader joe’*'*s/i, async ({ say }) => {
 
 app.message(/tj’*'*s/i, async ({ message, context }) => {
   try {
-    // Call chat.scheduleMessage with the built-in client
     const result = await app.client.reactions.add({
       token: context.botToken,
       name: 'eyes',
