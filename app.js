@@ -52,10 +52,10 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
 
   try {
     const res = await client.query('SELECT * FROM new_items');
-    console.log('grabbed items from database');
+    console.log('grabbed items from database for reccomendation...');
     itemNum = Math.floor(Math.random() * (res.rows.length - 1));
     const suggestedItem = res.rows[itemNum];
-    console.log(suggestedItem);
+    console.log(`recommending ${suggestedItem.item_title}.`);
 
     await say({
       text: `have you tried the ${suggestedItem.item_title}? https://traderjoes.com${suggestedItem.item_url}`
@@ -63,16 +63,6 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
   } catch (err) {
     console.log(err.stack);
   }
-
-  // const getItem = await axios.get('https://api.apify.com/v2/datasets/AvdATgp5GXh8DIXar/items?token='+ process.env.APIFY_TOKEN)
-  // .then(res => {
-  //   itemNum = Math.floor(Math.random() * 9);
-  //   const itemTitle = res.data[itemNum].title;
-  //   const itemUrl = res.data[itemNum].url;
-
-  //   return {title: itemTitle, url: itemUrl};
-  // });
-
 });
 
 (async () => {
