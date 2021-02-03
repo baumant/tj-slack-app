@@ -9,6 +9,7 @@ dotenv.config();
 
 // connect to DB and get latest list of new items
 let lastRun = [];
+let announcementText = '';
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -23,7 +24,15 @@ try {
   const res = await client.query('SELECT * FROM new_items')
   console.log('grabbed lastRun from database');
   lastRun = res.rows;
+} catch (err) {
+  console.log(err.stack);
+}
 
+try {
+  const res = await client.query('SELECT * FROM new_item_text_options')
+  announcementText = res.rows;
+  announcementText = announcementText[Math.floor(Math.random() * announcementText.length)].text;
+  console.log('decided how to announce new item');
 } catch (err) {
   console.log(err.stack);
 }
@@ -35,7 +44,7 @@ let blocks = [
     "type": "section",
     "text": {
       "type": "plain_text",
-      "text": "Omg check out this new new from our favorite store!! ✨",
+      "text": announcementText,
       "emoji": true
     }
   },
