@@ -73,9 +73,31 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
     const suggestedItem = res.rows[itemNum];
     console.log(`recommending ${suggestedItem.item_title}.`);
 
-    await say({
-      text: `have you tried the ${suggestedItem.item_title}? https://traderjoes.com${suggestedItem.item_url}`
-    })
+    await say(
+      {
+        "type": "section",
+        "text": {
+          "type": "plain_text",
+          "text": `have you tried ${suggestedItem.item_title}?? Check it out:`,
+          "emoji": true
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": `*<https://www.traderjoes.com${suggestedItem.item_url}|${suggestedItem.item_title}>*\n${suggestedItem.item_blurb}`
+        },
+        "accessory": {
+          "type": "image",
+          "image_url": `https://www.traderjoes.com${suggestedItem.item_img_url}`,
+          "alt_text": suggestedItem.item_title
+        }
+      }
+    )
   } catch (err) {
     console.log(err.stack);
   }
