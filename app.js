@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const { App } = require('@slack/bolt');
-const db = require('../db');
+const db = require('./db');
 
 dotenv.config();
 
