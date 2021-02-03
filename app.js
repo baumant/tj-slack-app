@@ -1,7 +1,6 @@
 const dotenv = require('dotenv');
 const { App } = require('@slack/bolt');
-const axios = require('axios');
-const { Client } = require('pg');
+const db = require('../db');
 
 dotenv.config();
 
@@ -54,20 +53,11 @@ app.message('TJ', async ({ message, context }) => {
   }
 });
 
-app.message(/what’*'*s good TJ/i, async ({message, say }) => {
+app.message(/what’*'*s good TJ/i, async ({ say }) => {
 
-  // connect to DB and get latest list of new items
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
-    }
-  });
-
-  await client.connect()
-
+  // connect to DB and get latest list of items for recommendation
   try {
-    const res = await client.query('SELECT * FROM new_items');
+    const res = await db.query('SELECT * FROM new_items')
     console.log('grabbed items from database for reccomendation...');
     itemNum = Math.floor(Math.random() * (res.rows.length - 1));
     const suggestedItem = res.rows[itemNum];
@@ -100,7 +90,7 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
 
     await say({ "blocks": blocks })
   } catch (err) {
-    console.log(err.stack);
+    console.log(err.stack)
   }
 });
 
