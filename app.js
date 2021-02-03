@@ -25,28 +25,28 @@ const app = new App({
   logLevel: LogLevel.DEBUG,
   installationStore: {
     storeInstallation: async (installation) => {
-      console.log(installation.team.id, installation);
+      console.log('storeinstallation');
       // change the line below so it saves to your database
-      // if (installation.isEnterpriseInstall) {
-      //   // support for org wide app installation
-      //   return await database.set(installation.enterprise.id, installation);
-      // } else {
-      //   // single team app installation
-      //   return await database.set(installation.team.id, installation);
-      // }
+      if (installation.isEnterpriseInstall) {
+        // support for org wide app installation
+        // return await database.set(installation.enterprise.id, installation);
+      } else {
+        // single team app installation
+        // return await database.set(installation.team.id, installation);
+      }
       throw new Error('Failed saving installation data to installationStore');
     },
     fetchInstallation: async (installQuery) => {
-      console.log(installQuery);
+      console.log('fetchinstallation');
       // change the line below so it fetches from your database
-      // if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
-      //   // org wide app installation lookup
-      //   return await database.get(installQuery.enterpriseId);
-      // }
-      // if (installQuery.teamId !== undefined) {
-      //   // single team app installation lookup
-      //   return await database.get(installQuery.teamId);
-      // }
+      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+        // org wide app installation lookup
+        // return await database.get(installQuery.enterpriseId);
+      }
+      if (installQuery.teamId !== undefined) {
+        // single team app installation lookup
+        return await db.query('SELECT * FROM installations WHERE id = $1', installQuery.teamId);
+      }
       throw new Error('Failed fetching installation');
     },
   },
