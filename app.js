@@ -1,13 +1,55 @@
 const dotenv = require('dotenv');
-const { App } = require('@slack/bolt');
+const { App, LogLevel } = require('@slack/bolt');
 const db = require('./db');
 
 dotenv.config();
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET
+  // token: process.env.SLACK_BOT_TOKEN,
+  // signingSecret: process.env.SLACK_SIGNING_SECRET
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  stateSecret: 'tj-is-a-cutie',
+  scopes: [
+    'channels:read', 
+    'chat:write', 
+    'groups:history', 
+    'im:history', 
+    'incoming-webhook', 
+    'links:read', 
+    'mpim:history', 
+    'reactions:write'
+  ],
+  logLevel: LogLevel.DEBUG,
+  installationStore: {
+    storeInstallation: async (installation) => {
+      console.log(installation.team.id, installation);
+      // change the line below so it saves to your database
+      // if (installation.isEnterpriseInstall) {
+      //   // support for org wide app installation
+      //   return await database.set(installation.enterprise.id, installation);
+      // } else {
+      //   // single team app installation
+      //   return await database.set(installation.team.id, installation);
+      // }
+      throw new Error('Failed saving installation data to installationStore');
+    },
+    fetchInstallation: async (installQuery) => {
+      console.log(installQuery);
+      // change the line below so it fetches from your database
+      // if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
+      //   // org wide app installation lookup
+      //   return await database.get(installQuery.enterpriseId);
+      // }
+      // if (installQuery.teamId !== undefined) {
+      //   // single team app installation lookup
+      //   return await database.get(installQuery.teamId);
+      // }
+      throw new Error('Failed fetching installation');
+    },
+  },
 });
 
 // Listens to incoming messages that contain "Trader Joe's"
