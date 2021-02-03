@@ -1,40 +1,29 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { Client } = require('pg');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const db = require('../db');
 
 (async () => {
 
-// connect to DB and get latest list of new items
 let lastRun = [];
 let announcementText = '';
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-
-await client.connect()
-
+// query DB for latest list of new items
 try {
-  const res = await client.query('SELECT * FROM new_items')
+  const res = await db.query('SELECT * FROM new_items')
   console.log('grabbed lastRun from database');
   lastRun = res.rows;
 } catch (err) {
-  console.log(err.stack);
+  console.log(err.stack)
 }
 
+// query DB for random announcement sentence
 try {
-  const res = await client.query('SELECT * FROM new_item_text_options')
+  const res = await db.query('SELECT * FROM new_item_text_options')
   announcementText = res.rows;
   announcementText = announcementText[Math.floor(Math.random() * announcementText.length)].text;
   console.log('decided how to announce new item');
 } catch (err) {
-  console.log(err.stack);
+  console.log(err.stack)
 }
 
 // scrape TJ whats new blog for latest items
@@ -81,10 +70,12 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
 
     if(isInDatabase == -1){
       // add item to DB
-      await client.query('INSERT INTO new_items (item_title, item_url, item_img_url, item_blurb) VALUES ($1, $2, $3, $4)', [item.item_title, item.item_url, item.item_img_url, item.item_blurb])
-        .then(() => {
-          console.log(`added ${item.item_title} to database.`);
-        }).catch((error) => console.log(error));
+      try {
+        await db.query('INSERT INTO new_items (item_title, item_url, item_img_url, item_blurb) VALUES ($1, $2, $3, $4)', [item.item_title, item.item_url, item.item_img_url, item.item_blurb])
+        console.log(`added ${item.item_title} to database.`);
+      } catch (err) {
+        console.log(err.stack)
+      }
 
       // push new items to message blocks
       blocks.push(
@@ -118,7 +109,5 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
 } else {
   console.log('no new items found.');
 }
-
-client.end();
 
 })();
