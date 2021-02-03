@@ -12,9 +12,18 @@ const app = new App({
 });
 
 // Listens to incoming messages that contain "Trader Joe's"
-app.message(/trader joe’*'*s/i, async ({ say }) => {
-  // say() sends a message to the channel where the event was triggered
-  await say("OMG I love Trader Joe's!!!");
+app.message(/trader joe’*'*s/i, async ({ message, context }) => {
+  try {
+    const result = await app.client.reactions.add({
+      token: context.botToken,
+      name: 'hearts',
+      channel: message.channel,
+      timestamp: message.ts
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
 });
 
 app.message(/tj’*'*s/i, async ({ message, context }) => {
@@ -31,12 +40,19 @@ app.message(/tj’*'*s/i, async ({ message, context }) => {
   }
 });
 
-// app.message('TJ', async ({ message, say }) => {
-//   // say() sends a message to the channel where the event was triggered
-//   await say({
-//     text: `Sup <@${message.user}>` 
-//   });
-// });
+app.message('TJ', async ({ message, context }) => {
+  try {
+    const result = await app.client.reactions.add({
+      token: context.botToken,
+      name: 'wave',
+      channel: message.channel,
+      timestamp: message.ts
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
 
 app.message(/what’*'*s good TJ/i, async ({message, say }) => {
 
