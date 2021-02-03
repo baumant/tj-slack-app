@@ -72,8 +72,7 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
     itemNum = Math.floor(Math.random() * (res.rows.length - 1));
     const suggestedItem = res.rows[itemNum];
     console.log(`recommending ${suggestedItem.item_title}.`);
-
-    await say(
+    const blocks = [
       {
         "type": "section",
         "text": {
@@ -97,7 +96,9 @@ app.message(/what’*'*s good TJ/i, async ({message, say }) => {
           "alt_text": suggestedItem.item_title
         }
       }
-    )
+    ]
+
+    await say({ "blocks": blocks })
   } catch (err) {
     console.log(err.stack);
   }
