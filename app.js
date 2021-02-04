@@ -53,7 +53,6 @@ const app = new App({
 
 // Listens to incoming messages that contain "Trader Joe's"
 app.message(/trader joe’*'*s/i, async ({ message, context }) => {
-  console.log(message, context);
   try {
     const result = await app.client.reactions.add({
       token: context.botToken,
@@ -68,7 +67,6 @@ app.message(/trader joe’*'*s/i, async ({ message, context }) => {
 });
 
 app.message(/tj’*'*s/i, async ({ message, context }) => {
-  console.log(message, context);
   try {
     const result = await app.client.reactions.add({
       token: context.botToken,
