@@ -7,7 +7,7 @@ dotenv.config();
 const fetchTeam = async (teamId) => {
   try {
     const rows = await db.query("SELECT installation FROM slack_tokens WHERE teamid = '" + teamId + "'");
-    console.log(JSON.parse(rows));
+    console.log(rows);
     return JSON.parse(rows[0].installation.toString());
   } catch (e) {
     console.log(e);
