@@ -37,7 +37,7 @@ const app = new App({
       throw new Error('Failed saving installation data to installationStore');
     },
     fetchInstallation: async (installQuery) => {
-      console.log('fetchinstallation');
+      console.log('fetchinstallation', installQuery);
       // change the line below so it fetches from your database
       if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
         // org wide app installation lookup
@@ -45,11 +45,15 @@ const app = new App({
       }
       if (installQuery.teamId !== undefined) {
         // single team app installation lookup
-        const res = await db.query('SELECT installation_id FROM auth WHERE installation_id = ' + installQuery.teamId);
-        console.log('FETCHINSTALL RESPONSE: ', res);
-        return res;
+        try {
+          const res = await db.query('SELECT installation_id FROM auth WHERE installation_id = ' + installQuery.teamId)
+          console.log(res);
+          return res;
+        } catch (err) {
+          console.log(err.stack)
+        }
       }
-      throw new Error('Failed fetching installation');
+      // throw new Error('Failed fetching installation');
     },
   },
 });
