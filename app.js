@@ -27,7 +27,8 @@ const app = new App({
     'incoming-webhook', 
     'links:read', 
     'mpim:history', 
-    'reactions:write'
+    'reactions:write',
+    'im:write'
   ],
   logLevel: LogLevel.DEBUG,
   installationStore: {
