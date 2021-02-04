@@ -7,8 +7,8 @@ dotenv.config();
 const fetchTeam = async (teamId) => {
   try {
     const res = await db.query("SELECT installation FROM slack_tokens WHERE teamid = '" + teamId + "'");
-    console.log(res.rows[0].installation);
-    return JSON.parse(res.rows[0].installation.toString());
+    const installation = JSON.parse(res.rows[0].installation.toString());
+    return installation.team.id;
   } catch (e) {
     console.log(e);
   }
@@ -16,8 +16,6 @@ const fetchTeam = async (teamId) => {
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
-  // token: process.env.SLACK_BOT_TOKEN,
-  // signingSecret: process.env.SLACK_SIGNING_SECRET
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
