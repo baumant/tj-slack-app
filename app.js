@@ -46,7 +46,7 @@ const app = new App({
       if (installQuery.teamId !== undefined) {
         // single team app installation lookup
         try {
-          const res = await db.query('SELECT installation_id FROM auth WHERE installation_id = ' + installQuery.teamId)
+          const res = await db.query('SELECT installation_id FROM auth WHERE installation_id = t8dspj45q')
           console.log(res);
           return res;
         } catch (err) {
