@@ -4,6 +4,16 @@ const db = require('./db');
 
 dotenv.config();
 
+const fetchTeam = async (teamId) => {
+  try {
+    const rows = await db.query("SELECT installation FROM slack_tokens WHERE teamid = '" + teamId + "'");
+    //console.log(JSON.parse(rows[0].installation.toString()).team.name);
+    return JSON.parse(rows[0].installation.toString());
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 // Initializes your app with your bot token and signing secret
 const app = new App({
   // token: process.env.SLACK_BOT_TOKEN,
@@ -25,37 +35,22 @@ const app = new App({
   logLevel: LogLevel.DEBUG,
   installationStore: {
     storeInstallation: async (installation) => {
-      console.log('storeinstallation');
-      // change the line below so it saves to your database
-      if (installation.isEnterpriseInstall) {
-        // support for org wide app installation
-        // return await database.set(installation.enterprise.id, installation);
-      } else {
-        // single team app installation
-        // return await database.set(installation.team.id, installation);
-      }
-      throw new Error('Failed saving installation data to installationStore');
-    },
-    fetchInstallation: async (installQuery) => {
-      console.log('fetchinstallation', installQuery);
-      // change the line below so it fetches from your database
-      if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
-        // org wide app installation lookup
-        // return await database.get(installQuery.enterpriseId);
-      }
-      if (installQuery.teamId !== undefined) {
-        // single team app installation lookup
+      if (installation.team.id !== undefined) {
         try {
-          const res = await db.query('SELECT * FROM auth');
-          console.log(res);
-          return res;
+          var sql = "INSERT INTO slack_tokens (teamid, installation) VALUES ('" + installation.team.id + "', '" + JSON.stringify(installation) + "')";
+          const res = await db.query(sql)
+          console.log("The app was installed successfully.");
         } catch (err) {
           console.log(err.stack)
         }
+      } else {
+        throw new Error('Failed saving installation data to installationStore');
       }
-      // throw new Error('Failed fetching installation');
     },
-  },
+    fetchInstallation: async (InstallQuery) => {
+      return await fetchTeam(InstallQuery.teamId);
+    }
+  }
 });
 
 // Listens to incoming messages that contain "Trader Joe's"
