@@ -5,6 +5,7 @@ const db = require('./db');
 dotenv.config();
 
 const fetchTeam = async (teamId) => {
+  console.log('fetchTeam', teamID);
   try {
     const res = await db.query("SELECT installation FROM slack_tokens WHERE teamid = '" + teamId + "'");
     return JSON.parse(res.rows[0].installation.toString());
@@ -53,6 +54,7 @@ const app = new App({
 
 // Listens to incoming messages that contain "Trader Joe's"
 app.message(/trader joe’*'*s/i, async ({ message, context }) => {
+  console.log('caught trader joes', message, context);
   try {
     const result = await app.client.reactions.add({
       token: context.botToken,
