@@ -98,13 +98,27 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
     }
   }
 
-  await axios.post('https://hooks.slack.com/services/T8DSPJ45Q/B01JS5JDNF6/' + process.env.WEBHOOK_SECRET, { "blocks": blocks })
-    .then(function (response) {
-      console.log(response.status, 'posted new item to #lunch');
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  try {
+    const res = await db.query('SELECT * FROM slack_tokens')
+    // console.log(res.rows);
+    let installations = res.rows;
+  
+    for (let i = 0; i < installations.length; i++) {
+      const installation = JSON.parse(installations[i].installation.toString());
+      console.log(installation.incomingWebhook.url);
+      await axios.post(installation.incomingWebhook.url, { "blocks": blocks })
+        .then(function (response) {
+          console.log(response.status, `posted new item to ${installation.incomingWebhook.channel}`);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  
+    }
+  } catch (err) {
+    console.log(err.stack)
+  }
+  
 
 } else {
   console.log('no new items found.');
