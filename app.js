@@ -22,6 +22,7 @@ const app = new App({
   stateSecret: 'tj-is-a-cutie',
   scopes: [
     'channels:read', 
+    'channels:history',
     'chat:write', 
     'groups:history', 
     'im:history', 
