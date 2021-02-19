@@ -69,6 +69,7 @@ app.message(/trader joe’*'*s/i, async ({ message, context }) => {
 });
 
 app.message(/tj’*'*s/i, async ({ message, context }) => {
+  console.log('caught tjs', message, context);
   try {
     const result = await app.client.reactions.add({
       token: context.botToken,
@@ -83,6 +84,7 @@ app.message(/tj’*'*s/i, async ({ message, context }) => {
 });
 
 app.message('TJ', async ({ message, context }) => {
+  console.log('caught TJ', message, context);
   try {
     const result = await app.client.reactions.add({
       token: context.botToken,
