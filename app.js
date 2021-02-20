@@ -52,6 +52,10 @@ const app = new App({
   }
 });
 
+app.event('message', async ({ event, client }) => {
+	console.log("Message Received", event, client);
+});
+
 // Listens to incoming messages that contain "Trader Joe's"
 app.message(/trader joe’*'*s/i, async ({ message, context }) => {
   try {
