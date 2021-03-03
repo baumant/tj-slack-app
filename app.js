@@ -39,6 +39,14 @@ const app = new App({
           var sql = "INSERT INTO slack_tokens (teamid, installation) VALUES ('" + installation.team.id + "', '" + JSON.stringify(installation) + "')";
           const res = await db.query(sql)
           console.log("The app was installed successfully.");
+          
+          //onboarding welcome
+          const client = new WebClient(installation.bot.token);
+          client.chat.postMessage({
+            token: installation.bot.token,
+            channel: installation.user.id,
+            text: ':wave: Welcome!'
+          });
         } catch (err) {
           console.log(err.stack)
         }
@@ -48,25 +56,6 @@ const app = new App({
     },
     fetchInstallation: async (InstallQuery) => {
       return await fetchTeam(InstallQuery.teamId);
-    }
-  },
-  installerOptions: {
-    callbackOptions: {
-      success: (installation, installerOptions, req, res) => {
-        // Display a success page or redirect back into Slack
-        //
-        // Learn how to redirect into Slack:
-        // https://github.com/slackapi/node-slack-sdk/blob/main/packages/oauth/src/index.ts#L527-L552
-        res.send('successful');
-
-        // Send a welcome message to the user as a DM
-        const client = new WebClient(installation.bot.token);
-        client.chat.postMessage({
-          token: installation.bot.token,
-          channel: installation.user.id,
-          text: ':wave: Welcome!'
-        });
-      }
     }
   }
 });
