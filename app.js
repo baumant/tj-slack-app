@@ -41,8 +41,7 @@ const app = new App({
           console.log("The app was installed successfully.");
           
           //onboarding welcome
-          const client = new WebClient(installation.bot.token);
-          client.chat.postMessage({
+          await app.client.chat.postMessage({
             token: installation.bot.token,
             channel: installation.user.id,
             text: ':wave: Welcome!'
