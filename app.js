@@ -13,10 +13,7 @@ const fetchTeam = async (teamId) => {
   }
 }
 
-const receiver = new ExpressReceiver({ signingSecret: process.env.SLACK_SIGNING_SECRET });
-
-// Initializes your app with your bot token and signing secret
-const app = new App({
+const customReceiver = new ExpressReceiver({ 
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
@@ -33,7 +30,6 @@ const app = new App({
     'reactions:write',
     'im:write'
   ],
-  logLevel: LogLevel.DEBUG,
   installationStore: {
     storeInstallation: async (installation) => {
       if (installation.team.id !== undefined) {
@@ -112,7 +108,12 @@ const app = new App({
       return await fetchTeam(InstallQuery.teamId);
     }
   },
-  receiver
+  logLevel: LogLevel.DEBUG
+});
+
+// Initializes your app with your bot token and signing secret
+const app = new App({
+  receiver: customReceiver
 });
 
 // Listens to incoming messages that contain "Trader Joe's"
@@ -199,10 +200,10 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   }
 });
 
-// receiver.router.get('/secret-page', (req, res) => {
-//   // You're working with an express req and res now.
-//   res.send('yay!');
-// });
+customReceiver.router.get('/secret-page', (req, res) => {
+  // You're working with an express req and res now.
+  res.send('yay!');
+});
 
 (async () => {
   // Start your app
