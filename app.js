@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-const { App, LogLevel } = require('@slack/bolt');
+const { App, LogLevel, ExpressReceiver } = require('@slack/bolt');
 const db = require('./db');
 
 dotenv.config();
@@ -12,6 +12,8 @@ const fetchTeam = async (teamId) => {
     console.log(e);
   }
 }
+
+const receiver = new ExpressReceiver({ signingSecret: process.env.SLACK_SIGNING_SECRET });
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
@@ -109,7 +111,8 @@ const app = new App({
     fetchInstallation: async (InstallQuery) => {
       return await fetchTeam(InstallQuery.teamId);
     }
-  }
+  },
+  receiver
 });
 
 // Listens to incoming messages that contain "Trader Joe's"
@@ -194,6 +197,11 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   } catch (err) {
     console.log(err.stack)
   }
+});
+
+receiver.router.post('/secret-page', (req, res) => {
+  // You're working with an express req and res now.
+  res.send('yay!');
 });
 
 (async () => {
