@@ -44,7 +44,60 @@ const app = new App({
           await app.client.chat.postMessage({
             token: installation.bot.token,
             channel: installation.user.id,
-            text: ':wave: Welcome!'
+            blocks: 
+              [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Hey there 👋 I'm TJ. I love Trader Joes and am always on top of their new releases."
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "➕ To get the latest and greatest from our boy Joe, *add me to a channel* and I'll introduce myself. I'm usually added to a casual conversation or lunch-based channel. Type `/invite @TJ` from the channel you selected during installation, or pick the channel on the right."
+                  },
+                  "accessory": {
+                    "type": "conversations_select",
+                    "placeholder": {
+                      "type": "plain_text",
+                      "text": "Select a channel...",
+                      "emoji": true
+                    }
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*My other great skill is recommendations*. Once I'm added to a channel, simply ask me `What's good TJ?` or type `/TJ recommend` and I'll recommend some 🔥"
+                  }
+                },
+                {
+                  "type": "image",
+                  "title": {
+                    "type": "plain_text",
+                    "text": "recommendation",
+                    "emoji": true
+                  },
+                  "image_url": "https://tj-slack-app.herokuapp.com/img/recommendation.png",
+                  "alt_text": "example TJ recommendation"
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "👀 View all tasks with `/TJ list`\n❓Get help at any time with `/TJ help` or type *help* in a DM with me"
+                    }
+                  ]
+                }
+              ]
           });
         } catch (err) {
           console.log(err.stack)
