@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const { App, LogLevel, ExpressReceiver } = require('@slack/bolt');
+const express = require('express');
 const db = require('./db');
 
 dotenv.config();
@@ -204,6 +205,8 @@ customReceiver.router.get('/secret-page', (req, res) => {
   // You're working with an express req and res now.
   res.send('yay!');
 });
+
+customReceiver.app.use('/public', express.static('/public'));
 
 (async () => {
   // Start your app
