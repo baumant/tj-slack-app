@@ -82,7 +82,7 @@ const app = new App({
                     "text": "recommendation",
                     "emoji": true
                   },
-                  "image_url": "https://tj-slack-app.herokuapp.com/img/recommendation.png",
+                  "image_url": "https://api.slack.com/img/blocks/bkb_template_images/onboardingComplex.jpg",
                   "alt_text": "example TJ recommendation"
                 },
                 {
