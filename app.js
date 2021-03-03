@@ -81,7 +81,7 @@ const customReceiver = new ExpressReceiver({
                     "text": "recommendation",
                     "emoji": true
                   },
-                  "image_url": "https://api.slack.com/img/blocks/bkb_template_images/onboardingComplex.jpg",
+                  "image_url": "https://tj-slack-app.herokuapp.com/public/recommendation.png",
                   "alt_text": "example TJ recommendation"
                 },
                 {
