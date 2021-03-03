@@ -199,10 +199,10 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   }
 });
 
-receiver.router.post('/secret-page', (req, res) => {
-  // You're working with an express req and res now.
-  res.send('yay!');
-});
+// receiver.router.get('/secret-page', (req, res) => {
+//   // You're working with an express req and res now.
+//   res.send('yay!');
+// });
 
 (async () => {
   // Start your app
