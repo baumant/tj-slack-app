@@ -206,7 +206,7 @@ customReceiver.router.get('/secret-page', (req, res) => {
   res.send('yay!');
 });
 
-customReceiver.app.use('/public', express.static('/public'));
+customReceiver.app.use('/public', express.static('public'));
 
 (async () => {
   // Start your app
