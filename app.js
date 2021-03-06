@@ -118,21 +118,27 @@ const app = new App({
   receiver: customReceiver
 });
 
-app.action({ action_id: 'add_tj_to_channel' },
-  async ({ body, action, ack, context }) => {
-    await ack();
-    try {
-      const result = await app.client.reactions.add({
-        token: context.botToken,
-        name: 'white_check_mark',
-        timestamp: action.ts,
-        channel: body.channel.id
-      });
-    }
-    catch (error) {
-      console.error(error);
-    }
-  });
+// app.action({ action_id: 'add_tj_to_channel' },
+//   async ({ body, action, ack, context }) => {
+//     await ack();
+//     try {
+//       const result = await app.client.reactions.add({
+//         token: context.botToken,
+//         name: 'white_check_mark',
+//         timestamp: action.ts,
+//         channel: body.channel.id
+//       });
+//     }
+//     catch (error) {
+//       console.error(error);
+//     }
+//   });
+
+app.action('conversations_select', async ({ ack, say }) => {
+  // Acknowledge action request
+  await ack();
+  await say('I joined the channel!');
+});
 
 
 // Listens to incoming messages that contain "Trader Joe's"
