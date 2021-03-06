@@ -131,8 +131,8 @@ app.action('add_tj_to_channel', async ({ body, action, ack, say, context }) => {
     await say('I joined the channel!');
   }
   catch (error) {
-    console.log(error);
-    await say('Sorry, there was a problem joining that channel.', error);
+    console.error(error, error.data.response_metadata);
+    await say('Sorry, there was a problem joining that channel.');
   }
 });
 
