@@ -118,22 +118,6 @@ const app = new App({
   receiver: customReceiver
 });
 
-// app.action({ action_id: 'add_tj_to_channel' },
-//   async ({ body, action, ack, context }) => {
-//     await ack();
-//     try {
-//       const result = await app.client.reactions.add({
-//         token: context.botToken,
-//         name: 'white_check_mark',
-//         timestamp: action.ts,
-//         channel: body.channel.id
-//       });
-//     }
-//     catch (error) {
-//       console.error(error);
-//     }
-//   });
-
 app.action('add_tj_to_channel', async ({ body, action, ack, say, context }) => {
   // Acknowledge action request
   await ack();
@@ -147,9 +131,8 @@ app.action('add_tj_to_channel', async ({ body, action, ack, say, context }) => {
   }
   catch (error) {
     console.log(error);
-    await say('Sorry, there was a problem joining that channel.');
+    await say('Sorry, there was a problem joining that channel.', error);
   }
-  
 });
 
 
@@ -247,6 +230,5 @@ customReceiver.app.use('/public', express.static('public'));
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3005);
-
-  console.log('⚡️ TJ is running! At ' + process.env.PORT || '3005');
+  console.log('⚡️ TJ is running! At' , process.env.PORT || '3005');
 })();
