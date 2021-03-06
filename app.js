@@ -134,10 +134,22 @@ const app = new App({
 //     }
 //   });
 
-app.action('add_tj_to_channel', async ({ ack, say }) => {
+app.action('add_tj_to_channel', async ({ body, action, ack, say, context }) => {
   // Acknowledge action request
   await ack();
-  await say('I joined the channel!');
+  console.log(body, action, context);
+  try {
+    await app.client.conversations.join({
+      token: context.botToken,
+      channel: body.channel.id
+    });
+    await say('I joined the channel!');
+  }
+  catch (error) {
+    console.log(error);
+    await say('Sorry, there was a problem joining that channel.');
+  }
+  
 });
 
 
