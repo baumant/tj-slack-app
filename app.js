@@ -119,16 +119,16 @@ const app = new App({
   receiver: customReceiver
 });
 
-app.action('add_tj_to_channel', async ({ body, action, context, ack, say }) => {
+app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
   // Acknowledge action request
   await ack();
-  console.log(body, action, context);
   try {
-    const result = await app.client.conversations.join({
+    await app.client.conversations.join({
       token: context.botToken,
       channel: action.selected_conversation
     });
     await say('I joined the channel!');
+    // todo: post hello mesage in channel
   }
   catch (error) {
     console.error(error, error.data.response_metadata);
