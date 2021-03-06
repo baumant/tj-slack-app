@@ -60,6 +60,7 @@ const customReceiver = new ExpressReceiver({
                   },
                   "accessory": {
                     "type": "conversations_select",
+                    "action_id": "add_tj_to_channel",
                     "placeholder": {
                       "type": "plain_text",
                       "text": "Select a channel...",
@@ -116,6 +117,23 @@ const customReceiver = new ExpressReceiver({
 const app = new App({
   receiver: customReceiver
 });
+
+app.action({ action_id: 'add_tj_to_channel' },
+  async ({ body, action, ack, context }) => {
+    await ack();
+    try {
+      const result = await app.client.reactions.add({
+        token: context.botToken,
+        name: 'white_check_mark',
+        timestamp: action.ts,
+        channel: body.channel.id
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+  });
+
 
 // Listens to incoming messages that contain "Trader Joe's"
 app.message(/trader joe’*'*s/i, async ({ message, context }) => {
@@ -201,9 +219,9 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   }
 });
 
-customReceiver.router.get('/secret-page', (req, res) => {
+customReceiver.router.get('/', (req, res) => {
   // You're working with an express req and res now.
-  res.send('yay!');
+  res.send('homepage');
 });
 
 customReceiver.app.use('/public', express.static('public'));
