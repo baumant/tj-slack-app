@@ -21,6 +21,7 @@ const customReceiver = new ExpressReceiver({
   stateSecret: 'tj-is-a-cutie',
   scopes: [
     'channels:read', 
+    'channels:join',
     'channels:history',
     'chat:write', 
     'groups:history', 
