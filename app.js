@@ -134,7 +134,7 @@ const app = new App({
 //     }
 //   });
 
-app.action('conversations_select', async ({ ack, say }) => {
+app.action('add_tj_to_channel', async ({ ack, say }) => {
   // Acknowledge action request
   await ack();
   await say('I joined the channel!');
