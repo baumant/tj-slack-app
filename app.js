@@ -285,6 +285,14 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   }
 });
 
+app.command('/tj', async ({ command, ack, say }) => {
+  // Acknowledge command request
+  await ack();
+
+  await say(`${command.text}`);
+});
+
+
 customReceiver.router.get('/', (req, res) => {
   // You're working with an express req and res now.
   res.send('homepage');
