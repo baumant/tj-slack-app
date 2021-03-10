@@ -285,11 +285,42 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   }
 });
 
-app.command('/tj', async ({ command, ack, say }) => {
-  // Acknowledge command request
+const helpText = [
+  {
+    "type": "section",
+    "text": {
+      "type": "plain_text",
+      "text": `help text testing`,
+      "emoji": true
+    }
+  }
+]
+
+app.command('/tj help', async ({ command, ack, say, context }) => {
   await ack();
 
-  await say(`${command.text}`);
+  const result = await app.client.chat.postEphemeral({
+    token: context.botToken,
+    channel: command.channel,
+    blocks: helpText
+  });
+  console.log(result);
+  
+});
+
+app.shortcut('tj_help', async ({ ack }) => {  
+  await ack();
+  await say('tj_help shortcut response');
+});
+
+app.command('/tj recommend', async ({ command, ack, say }) => {
+  await ack();
+  await say('todo: add recommendation here...');
+});
+
+app.shortcut('tj_recommend', async ({ ack }) => {  
+  await ack();
+  await say('todo: add recommendation here...');
 });
 
 
