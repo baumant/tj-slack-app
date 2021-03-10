@@ -134,7 +134,7 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
     const res = await db.query('SELECT * FROM new_items ORDER BY ID DESC LIMIT 1')
     const exampleItem = res.rows[0];
     console.log(exampleItem);
-    
+
     const channelJoinedMessage = [
       {
         "type": "section",
@@ -183,11 +183,12 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
     ];
 
     // post hello mesage in channel
-    await app.client.chat.postMessage({
-      token: context.bot.token,
-      channel: action.selected_conversation,
-      blocks: channelJoinedMessage
-    });
+    // await app.client.chat.postMessage({
+    //   token: context.bot.token,
+    //   channel: action.selected_conversation,
+    //   blocks: channelJoinedMessage
+    // });
+    await say({blocks:channelJoinedMessage});
 
   }
   catch (error) {
