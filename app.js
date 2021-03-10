@@ -95,7 +95,7 @@ const customReceiver = new ExpressReceiver({
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": "❓Get help at any time with `/TJ help` or type *help* in a DM with me"
+                      "text": "❓Get help at any time with `/TJ help`"
                     }
                   ]
                 }
@@ -178,7 +178,7 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
         "elements": [
           {
             "type": "mrkdwn",
-            "text": "❓Get help at any time with `/TJ help` or type *help* in a DM with me"
+            "text": "❓Get help at any time with `/TJ help`"
           }
         ]
       }
