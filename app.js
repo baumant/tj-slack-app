@@ -184,7 +184,7 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
 
     // post hello mesage in channel
     const result = await app.client.chat.postMessage({
-      token: context.bot.token,
+      token: context.botToken,
       channel: action.selected_conversation,
       blocks: channelJoinedMessage
     });
