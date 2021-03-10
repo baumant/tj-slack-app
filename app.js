@@ -338,9 +338,49 @@ app.command('/tj', async ({ command, ack, say, context }) => {
 
     console.log(command);
     if(command.text == 'help'){
+
       await say({blocks: helpModal.blocks});
+
     } else if(command.text == 'recommend'){
-      await say('recommendation incoming...');
+
+      // connect to DB and get latest list of items for recommendation
+      try {
+        const res = await db.query('SELECT * FROM new_items')
+        console.log('grabbed items from database for reccomendation...');
+        itemNum = Math.floor(Math.random() * (res.rows.length - 1));
+        const suggestedItem = res.rows[itemNum];
+        console.log(`recommending ${suggestedItem.item_title}.`);
+        const blocks = [
+          {
+            "type": "section",
+            "text": {
+              "type": "plain_text",
+              "text": `have you tried ${suggestedItem.item_title}?? Check it out:`,
+              "emoji": true
+            }
+          },
+          {
+            "type": "divider"
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": `*<https://www.traderjoes.com${suggestedItem.item_url}|${suggestedItem.item_title}>*\n${suggestedItem.item_blurb}`
+            },
+            "accessory": {
+              "type": "image",
+              "image_url": `https://www.traderjoes.com${suggestedItem.item_img_url}`,
+              "alt_text": suggestedItem.item_title
+            }
+          }
+        ]
+
+        await say({ "blocks": blocks })
+      } catch (err) {
+        console.log(err.stack)
+      }
+
     }
   }
   catch (error) {
