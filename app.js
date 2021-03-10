@@ -128,28 +128,70 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
       token: context.botToken,
       channel: action.selected_conversation
     });
+    
     await say('I joined the channel!');
-    // todo: post hello mesage in channel
+    
+    const res = await db.query('SELECT * FROM new_items ORDER BY ID DESC LIMIT 1')
+    console.log(res);
+    const exampleItem = res.rows[0];
+    const channelJoinedMessage = [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "Hi everyone 👋 I'm TJ. I love Trader Joes and I'm always the first to know when they release something new! When something new comes out, I'll add it to this channel like this:"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": `*<https://www.traderjoes.com${exampleItem.item_url}|${exampleItem.item_title}>*\n${exampleItem.item_blurb}`
+        },
+        "accessory": {
+          "type": "image",
+          "image_url": `https://www.traderjoes.com${exampleItem.item_img_url}`,
+          "alt_text": exampleItem.item_title
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "*I can also give some great recommendations of unique Trader Joe's items*. Simply ask me `What's good TJ?` or type `/TJ recommend` and I'll recommend some 🔥"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "context",
+        "elements": [
+          {
+            "type": "mrkdwn",
+            "text": "👀 View all tasks with `/TJ list`\n❓Get help at any time with `/TJ help` or type *help* in a DM with me"
+          }
+        ]
+      }
+    ];
+
+    // post hello mesage in channel
+    await app.client.chat.postMessage({
+      token: context.bot.token,
+      channel: action.selected_conversation,
+      blocks: channelJoinedMessage
+    });
+
   }
   catch (error) {
     console.error(error, error.data.response_metadata);
     await say('Sorry, there was a problem joining that channel.');
-  }
-});
-
-// Tj says hello when added to a channel
-app.event('channel_joined', async ({ event, client }) => {
-  try {
-    // Call chat.postMessage with the built-in client
-    // const result = await client.chat.postMessage({
-    //   channel: welcomeChannelId,
-    //   text: `Welcome to the team, <@${event.user}>! 🎉 You can introduce yourself in this channel.`
-    // });
-    // console.log(result);
-    console.log(event);
-  }
-  catch (error) {
-    console.error(error);
   }
 });
 
