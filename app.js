@@ -94,7 +94,7 @@ const customReceiver = new ExpressReceiver({
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": "Get help at any time with `/TJ help` or type *help* in a DM with me"
+                      "text": "❓Get help at any time with `/TJ help` or type *help* in a DM with me"
                     }
                   ]
                 }
@@ -125,6 +125,7 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
   await ack();
 
   const channelID = action.selected_conversation;
+  console.log(context);
   
   try {
     await app.client.conversations.join({
@@ -176,7 +177,7 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
         "elements": [
           {
             "type": "mrkdwn",
-            "text": "Get help at any time with `/TJ help` or type *help* in a DM with me"
+            "text": "❓Get help at any time with `/TJ help` or type *help* in a DM with me"
           }
         ]
       }
@@ -282,14 +283,6 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
     console.log(err.stack)
   }
 });
-
-// Help command
-// app.command('/tj', async ({ command, ack, say }) => {
-//   // Acknowledge command request
-//   await ack();
-
-//   await say(`${command.text}`);
-// });
 
 customReceiver.router.get('/', (req, res) => {
   // You're working with an express req and res now.
