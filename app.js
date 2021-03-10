@@ -341,6 +341,7 @@ app.command('/tj', async ({ command, ack, say, context }) => {
 
       const result = await app.client.chat.postEphemeral({
         token: context.botToken,
+        user: command.user_id,
         channel: command.channel_id,
         blocks: helpModal.blocks
       });
@@ -391,7 +392,6 @@ app.command('/tj', async ({ command, ack, say, context }) => {
   catch (error) {
     console.error(error);
   }
-  
 });
 
 app.shortcut('tj_help', async ({ shortcut, ack, client }) => {
@@ -414,14 +414,13 @@ app.shortcut('tj_help', async ({ shortcut, ack, client }) => {
 });
 
 customReceiver.router.get('/', (req, res) => {
-  // You're working with an express req and res now.
   res.send('homepage');
 });
 
 customReceiver.app.use('/public', express.static('public'));
 
 (async () => {
-  // Start your app
+  // Start the app
   await app.start(process.env.PORT || 3005);
   console.log('⚡️ TJ is running! At' , process.env.PORT || '3005');
 })();
