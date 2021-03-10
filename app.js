@@ -298,6 +298,7 @@ const helpText = [
 
 app.command('/tj help', async ({ command, ack, say, context }) => {
   await ack();
+  console.log(command, context);
 
   const result = await app.client.chat.postEphemeral({
     token: context.botToken,
@@ -308,7 +309,7 @@ app.command('/tj help', async ({ command, ack, say, context }) => {
   
 });
 
-app.shortcut('tj_help', async ({ ack }) => {  
+app.shortcut('tj_help', async ({ ack, say }) => {  
   await ack();
   await say('tj_help shortcut response');
 });
@@ -318,7 +319,7 @@ app.command('/tj recommend', async ({ command, ack, say }) => {
   await say('todo: add recommendation here...');
 });
 
-app.shortcut('tj_recommend', async ({ ack }) => {  
+app.shortcut('tj_recommend', async ({ ack, say }) => {  
   await ack();
   await say('todo: add recommendation here...');
 });
