@@ -132,8 +132,9 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
     await say('I joined the channel!');
     
     const res = await db.query('SELECT * FROM new_items ORDER BY ID DESC LIMIT 1')
-    console.log(res);
     const exampleItem = res.rows[0];
+    console.log(exampleItem);
+    
     const channelJoinedMessage = [
       {
         "type": "section",
