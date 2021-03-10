@@ -352,11 +352,11 @@ app.command('/tj', async ({ command, ack, say, context }) => {
 
       // connect to DB and get latest list of items for recommendation
       try {
-        const username = await app.client.users.info({
+        const commandUser = await app.client.users.info({
           token: context.botToken,
           user: command.user_id
         });
-        console.log(username);
+        console.log(commandUser);
 
 
         const res = await db.query('SELECT * FROM new_items')
@@ -369,7 +369,7 @@ app.command('/tj', async ({ command, ack, say, context }) => {
             "type": "section",
             "text": {
               "type": "plain_text",
-              "text": `@${username} have you tried ${suggestedItem.item_title}?? Check it out:`,
+              "text": `@${commandUser.user.name} have you tried ${suggestedItem.item_title}?? Check it out:`,
               "emoji": true
             }
           },
