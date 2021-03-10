@@ -20,10 +20,11 @@ const customReceiver = new ExpressReceiver({
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: 'tj-is-a-cutie',
   scopes: [
-    'channels:read', 
-    'channels:join',
     'channels:history',
+    'channels:read',
+    'channels:join',
     'chat:write', 
+    'commands',
     'groups:history', 
     'im:history', 
     'incoming-webhook', 
