@@ -285,27 +285,67 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   }
 });
 
-const helpText = [
-  {
-    "type": "section",
-    "text": {
-      "type": "plain_text",
-      "text": `help text testing`,
-      "emoji": true
+const helpModal = {
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "TJ Help",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Got it!",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Need a recommendation?",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "ask me `What's good TJ?` or enter `/TJ recommend` and I'll give you a suggestion."
+			}
+		},
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Having issues with TJ?",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Send an email to support@timothybauman.com and we'll help you out!"
+			}
+		}
+	]
+};
+
+app.command('/TJ', async ({ command, ack, say, context }) => {
+  try {
+    // Acknowledge shortcut request
+    await ack();
+
+    console.log(command);
+    if(command.text == 'help'){
+      await say({blocks: helpModal.blocks});
+    } else if(command.text == 'recommend'){
+      await say('recommendation incoming...');
     }
   }
-]
-
-app.command('/tj help', async ({ command, ack, say, context }) => {
-  await ack();
-  console.log(command, context);
-
-  const result = await app.client.chat.postEphemeral({
-    token: context.botToken,
-    channel: command.channel,
-    blocks: helpText
-  });
-  console.log(result);
+  catch (error) {
+    console.error(error);
+  }
   
 });
 
@@ -315,40 +355,10 @@ app.shortcut('tj_help', async ({ shortcut, ack, client }) => {
     // Acknowledge shortcut request
     await ack();
 
-    console.log(shortcut, client);
-    
     // Call the views.open method using one of the built-in WebClients
     const result = await client.views.open({
       trigger_id: shortcut.trigger_id,
-      view: {
-        type: "modal",
-        title: {
-          type: "plain_text",
-          text: "My App"
-        },
-        close: {
-          type: "plain_text",
-          text: "Close"
-        },
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "About the simplest modal you could conceive of :smile:\n\nMaybe <https://api.slack.com/reference/block-kit/interactive-components|*make the modal interactive*> or <https://api.slack.com/surfaces/modals/using#modifying|*learn more advanced modal use cases*>."
-            }
-          },
-          {
-            type: "context",
-            elements: [
-              {
-                type: "mrkdwn",
-                text: "Psssst this modal was designed using <https://api.slack.com/tools/block-kit-builder|*Block Kit Builder*>"
-              }
-            ]
-          }
-        ]
-      }
+      view: helpModal
     });
 
     console.log(result);
@@ -357,17 +367,6 @@ app.shortcut('tj_help', async ({ shortcut, ack, client }) => {
     console.error(error);
   }
 });
-
-app.command('/tj recommend', async ({ command, ack, say }) => {
-  await ack();
-  await say('todo: add recommendation here...');
-});
-
-app.shortcut('tj_recommend', async ({ ack, say }) => {  
-  await ack();
-  await say('todo: add recommendation here...');
-});
-
 
 customReceiver.router.get('/', (req, res) => {
   // You're working with an express req and res now.
