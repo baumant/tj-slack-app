@@ -132,11 +132,8 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
       channel: channelID
     });
     
-    await say('I joined the channel!');
-    
     const res = await db.query('SELECT * FROM new_items ORDER BY ID DESC LIMIT 1')
     const exampleItem = res.rows[0];
-    console.log(exampleItem);
 
     const channelJoinedMessage = [
       {
@@ -186,19 +183,18 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
     ];
 
     // post hello mesage in channel
-    // await app.client.chat.postMessage({
-    //   token: context.bot.token,
-    //   channel: action.selected_conversation,
-    //   blocks: channelJoinedMessage
-    // });
-    await say({
-      blocks:channelJoinedMessage, 
-      channel: channelID
+    const result = await app.client.chat.postMessage({
+      token: context.bot.token,
+      channel: action.selected_conversation,
+      blocks: channelJoinedMessage
     });
+    console.log(result);
+
+    await say('I joined the channel!');
 
   }
   catch (error) {
-    console.error(error, error.data.response_metadata);
+    console.error(error);
     await say('Sorry, there was a problem joining that channel.');
   }
 });
