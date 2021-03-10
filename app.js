@@ -94,7 +94,7 @@ const customReceiver = new ExpressReceiver({
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": "👀 View all tasks with `/TJ list`\n❓Get help at any time with `/TJ help` or type *help* in a DM with me"
+                      "text": "Get help at any time with `/TJ help` or type *help* in a DM with me"
                     }
                   ]
                 }
@@ -176,19 +176,18 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
         "elements": [
           {
             "type": "mrkdwn",
-            "text": "👀 View all tasks with `/TJ list`\n❓Get help at any time with `/TJ help` or type *help* in a DM with me"
+            "text": "Get help at any time with `/TJ help` or type *help* in a DM with me"
           }
         ]
       }
     ];
 
     // post hello mesage in channel
-    const result = await app.client.chat.postMessage({
+    await app.client.chat.postMessage({
       token: context.botToken,
       channel: action.selected_conversation,
       blocks: channelJoinedMessage
     });
-    console.log(result);
 
     await say('I joined the channel!');
 
@@ -281,6 +280,14 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
   } catch (err) {
     console.log(err.stack)
   }
+});
+
+// Help command
+app.command('/tj', async ({ command, ack, say }) => {
+  // Acknowledge command request
+  await ack();
+
+  await say(`${command.text}`);
 });
 
 customReceiver.router.get('/', (req, res) => {
