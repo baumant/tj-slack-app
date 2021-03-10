@@ -337,7 +337,6 @@ app.command('/tj', async ({ command, ack, say, context }) => {
     // Acknowledge shortcut request
     await ack();
 
-    console.log(command);
     if(command.text == 'help'){
 
       const result = await app.client.chat.postEphemeral({
@@ -395,6 +394,8 @@ app.command('/tj', async ({ command, ack, say, context }) => {
         console.log(err.stack)
       }
 
+    } else {
+      await say("Sorry, I dont know that command. Try /tj help or /tj recommend");
     }
   }
   catch (error) {
