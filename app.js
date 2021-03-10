@@ -183,11 +183,12 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
     ];
 
     // post hello mesage in channel
-    await app.client.chat.postMessage({
+    const result = await app.client.chat.postMessage({
       token: context.botToken,
       channel: action.selected_conversation,
       blocks: channelJoinedMessage
     });
+    console.log(result);
 
     await say('I joined the channel!');
 
@@ -283,12 +284,12 @@ app.message(/what’*'*s good TJ/i, async ({ say }) => {
 });
 
 // Help command
-app.command('/tj', async ({ command, ack, say }) => {
-  // Acknowledge command request
-  await ack();
+// app.command('/tj', async ({ command, ack, say }) => {
+//   // Acknowledge command request
+//   await ack();
 
-  await say(`${command.text}`);
-});
+//   await say(`${command.text}`);
+// });
 
 customReceiver.router.get('/', (req, res) => {
   // You're working with an express req and res now.
