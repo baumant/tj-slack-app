@@ -339,7 +339,12 @@ app.command('/tj', async ({ command, ack, say, context }) => {
     console.log(command);
     if(command.text == 'help'){
 
-      await say({blocks: helpModal.blocks});
+      const result = await app.client.chat.postEphemeral({
+        token: context.botToken,
+        channel: command.channel_id,
+        blocks: helpModal.blocks
+      });
+      console.log(result);
 
     } else if(command.text == 'recommend'){
 
