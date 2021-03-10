@@ -369,7 +369,7 @@ app.command('/tj', async ({ command, ack, say, context }) => {
             "type": "section",
             "text": {
               "type": "plain_text",
-              "text": `@${commandUser.user.name} have you tried ${suggestedItem.item_title}?? Check it out:`,
+              "text": `@${commandUser.user.profile.display_name} have you tried ${suggestedItem.item_title}?? Check it out:`,
               "emoji": true
             }
           },
