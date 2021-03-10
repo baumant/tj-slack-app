@@ -331,7 +331,7 @@ const helpModal = {
 	]
 };
 
-app.command('/TJ', async ({ command, ack, say, context }) => {
+app.command('/tj', async ({ command, ack, say, context }) => {
   try {
     // Acknowledge shortcut request
     await ack();
