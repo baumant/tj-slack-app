@@ -119,6 +119,7 @@ const app = new App({
   receiver: customReceiver
 });
 
+// add TJ to a channel from the intro message
 app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
   // Acknowledge action request
   await ack();
@@ -136,6 +137,21 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
   }
 });
 
+// Tj says hello when added to a channel
+app.event('channel_joined', async ({ event, client }) => {
+  try {
+    // Call chat.postMessage with the built-in client
+    // const result = await client.chat.postMessage({
+    //   channel: welcomeChannelId,
+    //   text: `Welcome to the team, <@${event.user}>! 🎉 You can introduce yourself in this channel.`
+    // });
+    // console.log(result);
+    console.log(event);
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
 
 // Listens to incoming messages that contain "Trader Joe's"
 app.message(/trader joe’*'*s/i, async ({ message, context }) => {
