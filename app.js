@@ -104,7 +104,7 @@ const customReceiver = new ExpressReceiver({
 
         try {
           const result = await db.query(updateQuery);
-          console.log('updateQueryResult' + result);
+
           if(result.rowCount > 0){
             //onboarding welcome
             await app.client.chat.postMessage({
@@ -115,13 +115,19 @@ const customReceiver = new ExpressReceiver({
           } else {
             try{
               const res = await db.query(insertQuery);
-              console.log('insertQueryResult' + res);
-            }catch (e){
-              console.log(e);
+
+              //onboarding welcome
+              await app.client.chat.postMessage({
+                token: installation.bot.token,
+                channel: installation.user.id,
+                blocks: onboardingBlocks
+              });
+            }catch (error){
+              console.log(error);
             }
           }
-        }catch (e){
-          console.log(e);
+        }catch (error){
+          console.log(error);
         }
       } else {
         throw new Error('Failed saving installation data to installationStore');
