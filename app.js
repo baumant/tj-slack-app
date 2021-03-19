@@ -47,35 +47,14 @@ const customReceiver = new ExpressReceiver({
         updateQuery.text = 'UPDATE slack_tokens SET teamid = $1, installation = $2 WHERE teamid = $3';
         updateQuery.values = [`${installation.team.id}`, JSON.stringify(installation), `${installation.team.id}`];
 
-        console.log(insertQuery, updateQuery);
-
-        await db.query (updateQuery, (err, result)=>{
-          try {
-            if (err) throw err;
-            console.log('result1', result);
-            if (result.rowCount > 0){
-              console.log ('Rows affected 1: ', result.rowCount);
-              return;
-            } else {
-              db.query(insertQuery, (error, res) =>{
-                console.log('result2', res);
-                try {
-                  if (error) throw error;
-                  console.log ('Rows affected 2:', res.rowCount);
-                }catch(er){
-                  console.log(er);
-                }finally {
-                   //do something here
-                   console.log('finally 1');
-                }
-              });
-            }
-          }catch (e){
-            console.log(e);
-          }finally{
-            console.log('finally 2')
-          }
-        });
+        try {
+          const result = await db.query (updateQuery);
+          console.log(result);
+        }catch (e){
+          console.log(e);
+        }finally{
+          console.log('finally 2')
+        }
         // try {
           
         //   // var sql = "INSERT INTO slack_tokens (teamid, installation) VALUES ('" + installation.team.id + "', '" + JSON.stringify(installation) + "')";
