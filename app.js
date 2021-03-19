@@ -45,7 +45,7 @@ const customReceiver = new ExpressReceiver({
         let updateQuery = {};
 
         updateQuery.text = 'UPDATE slack_tokens SET teamid = $1, installation = $2 WHERE teamid = $3';
-        updateQuery.value = [`${installation.team.id}`, JSON.stringify(installation), `${installation.team.id}`];
+        updateQuery.values = [`${installation.team.id}`, JSON.stringify(installation), `${installation.team.id}`];
 
         console.log(insertQuery, updateQuery);
 
