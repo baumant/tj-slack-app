@@ -46,36 +46,33 @@ const customReceiver = new ExpressReceiver({
 
         updateQuery.text = 'UPDATE slack_tokens SET teamid = $1, installation = $2 WHERE teamid = $3';
         updateQuery.value = [`${installation.team.id}`, JSON.stringify(installation), `${installation.team.id}`];
-        try {
-          await db.query(updateQuery);
-        } catch(error) {
-          console.log(error.stack)
-        }
-        
-        // await db.query (updateQuery, (err, result)=>{
-        //   try {
-        //     if (err) throw err;
-        //     if (result.rowCount > 0){
-        //       console.log ('Rows affected: ', result.rowCount);
-        //       return;
-        //     } else {
-        //       db.query(insertQuery, (error, res) =>{
-        //         try {
-        //           if (error) throw error;
-        //           console.log ('Rows affected:', res.rowCount);
-        //         }catch(er){
-        //           console.log(er);
-        //         }finally {
-        //            //do something here
-        //            console.log('finally 1');
-        //         }
-        //       });
-        //     }
-        //   }catch (e){
-        //     console.log(e);
-        //   }finally{
-        //     console.log('finally 2')
-        //   }
+
+        console.log(insertQuery, updateQuery);
+
+        await db.query (updateQuery, (err, result)=>{
+          try {
+            if (err) throw err;
+            if (result.rowCount > 0){
+              console.log ('Rows affected: ', result.rowCount);
+              return;
+            } else {
+              db.query(insertQuery, (error, res) =>{
+                try {
+                  if (error) throw error;
+                  console.log ('Rows affected:', res.rowCount);
+                }catch(er){
+                  console.log(er);
+                }finally {
+                   //do something here
+                   console.log('finally 1');
+                }
+              });
+            }
+          }catch (e){
+            console.log(e);
+          }finally{
+            console.log('finally 2')
+          }
         });
         // try {
           
