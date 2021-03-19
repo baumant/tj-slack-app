@@ -1,0 +1,65 @@
+body{
+  background-color: #B31100;
+  font-family: Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+  color: white;
+}
+
+img {
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+p {
+  font-size: 18px;
+}
+
+a {
+  color: #BEE7DF;
+}
+
+.text-center { text-align: center; }
+
+#tj {
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+#tj .headshot {
+  max-width: 300px;
+}
+
+#tj h2.text-center {
+  position: relative;
+}
+
+#tj .install-link {
+  display: block;
+  font-size: 130px;
+  text-decoration: none;
+}
+
+#tj .hover-animation:hover {
+  animation: MoveUpDown 1s linear infinite;
+  position: relative;
+}
+
+@keyframes MoveUpDown {
+  0%, 100% {
+    bottom: 0;
+  }
+  50% {
+    bottom: 10px;
+  }
+}
+
+.support{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.support p {
+  font-size: 11px;
+}

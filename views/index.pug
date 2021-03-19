@@ -1,0 +1,46 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(name='description', content='Meet TJ, the Trader Joes superfan slack bot')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    meta(name='robots', content='index, follow')
+    // Open Graph Tags 
+    meta(property='og:title', content="Hey there, I'm TJ!")
+    meta(property='og:type', content='website')
+    meta(property='og:url', content='https://tj-slack-app.herokuapp.com/')
+    meta(property='og:image', content='https://tj-slack-app.herokuapp.com/public/v3-e.jpg')
+    meta(property='og:description', content='Meet TJ, the Trader Joes superfan slack bot')
+    meta(property='og:site_name', content="Hey there, I'm TJ!")
+    
+    // Twitter Card Tags : Images must be at least 120x120px
+    meta(name='twitter:card', content='summary')
+    meta(name='twitter:title', content="Hey there, I'm TJ!")
+    meta(name='twitter:description', content='Meet TJ, the Trader Joes superfan slack bot')
+    meta(name='twitter:creator', content='@baumant')
+    meta(name='twitter:image', content='https://tj-slack-app.herokuapp.com/public/v3-e.jpg')
+
+    link(rel="stylesheet" href="public/truffle-oil.css")
+  body
+    #tj
+      img.headshot(src="public/v3-e.jpg")
+      h1.text-center Hey there, I'm TJ!
+      p I'm a Trader Joe's superfan, and I'll let you and your team know when Joe drops the latest and greatest:
+      img(src="public/new-product.png")
+      p I can also give you some recommendations for some 🔥 products I think you'll like:
+      img(src="public/recommendation.png")
+      h2.text-center Add me to your Slack here:
+        a.install-link.hover-animation(href="/slack/install") 🤝
+      p.text-center if you want to support my trader joe's habit, you can do so here: 
+      .support
+        form.text-center.hover-animation(action="https://www.paypal.com/donate" method="post" target="_top")
+          input(type="hidden" name="business" value="LAX44F7S8K2SL")
+          input(type="hidden" name="currency_code" value="USD")
+          input(type="image" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/money-bag_1f4b0.png" border="0" name="submit" title="Donations for TJ slack app" alt="Donate to TJ")
+          img(alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1")
+        .crypto
+          img.hover-animation(src="https://dynamic-assets.coinbase.com/e785e0181f1a23a30d9476038d9be91e9f6c63959b538eabbc51a1abc8898940383291eede695c3b8dfaa1829a9b57f5a2d0a16b0523580346c6b8fab67af14b/asset_icons/b57ac673f06a4b0338a596817eb0a50ce16e2059f327dc117744449a47915cb2.png")
+          p 1EbT9mjV1QTvfH93ByyEeBnin5febY9bnE
+      p.text-center and please direct all fan mail to my dad, 
+        a(href="mailto:tim@slapps.me") tim@slapps.me

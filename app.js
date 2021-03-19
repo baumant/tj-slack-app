@@ -446,8 +446,10 @@ app.shortcut('tj_help', async ({ shortcut, ack, client }) => {
   }
 });
 
+customReceiver.app.set('view engine', 'pug');
+
 customReceiver.router.get('/', (req, res) => {
-  res.send('homepage');
+  res.render('index', { title: "Hey there, I'm TJ!" })
 });
 
 customReceiver.app.use('/public', express.static('public'));
