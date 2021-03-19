@@ -52,14 +52,16 @@ const customReceiver = new ExpressReceiver({
         await db.query (updateQuery, (err, result)=>{
           try {
             if (err) throw err;
+            console.log('result1', result);
             if (result.rowCount > 0){
-              console.log ('Rows affected: ', result.rowCount);
+              console.log ('Rows affected 1: ', result.rowCount);
               return;
             } else {
               db.query(insertQuery, (error, res) =>{
+                console.log('result2', res);
                 try {
                   if (error) throw error;
-                  console.log ('Rows affected:', res.rowCount);
+                  console.log ('Rows affected 2:', res.rowCount);
                 }catch(er){
                   console.log(er);
                 }finally {
