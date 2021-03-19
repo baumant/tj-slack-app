@@ -37,74 +37,110 @@ const customReceiver = new ExpressReceiver({
   installationStore: {
     storeInstallation: async (installation) => {
       if (installation.team.id !== undefined) {
-        try {
-          var sql = "INSERT INTO slack_tokens (teamid, installation) VALUES ('" + installation.team.id + "', '" + JSON.stringify(installation) + "')";
-          const res = await db.query(sql)
-          console.log("The app was installed successfully.");
-          
-          //onboarding welcome
-          await app.client.chat.postMessage({
-            token: installation.bot.token,
-            channel: installation.user.id,
-            blocks: 
-              [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Hey there 👋 I'm TJ. I love Trader Joes and am always on top of their new releases."
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "➕ To get the latest and greatest from our boy Joe, *add me to a channel* and I'll introduce myself. I'm usually added to a casual conversation or lunch-based channel. Type `/invite @TJ` from the channel you selected during installation, or pick the channel on the right."
-                  },
-                  "accessory": {
-                    "type": "conversations_select",
-                    "action_id": "add_tj_to_channel",
-                    "placeholder": {
-                      "type": "plain_text",
-                      "text": "Select a channel...",
-                      "emoji": true
-                    }
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*My other great skill is recommendations*. Once I'm added to a channel, simply ask me `What's good TJ?` or type `/TJ recommend` and I'll recommend some 🔥"
-                  }
-                },
-                {
-                  "type": "image",
-                  "title": {
-                    "type": "plain_text",
-                    "text": "recommendation",
-                    "emoji": true
-                  },
-                  "image_url": "https://tj-slack-app.herokuapp.com/public/recommendation.png",
-                  "alt_text": "example TJ recommendation"
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "❓Get help at any time with `/TJ help`"
-                    }
-                  ]
+        let insertQuery = {};
+        let params = [`${installation.team.id}`, JSON.stringify(installation)];
+        insertQuery.text = 'INSERT INTO slack_tokens (teamid, installation) VALUES ($1, $2)';
+        insertQuery.values = params;
+
+        let updateQuery = {};
+
+        updateQuery.text = 'UPDATE slack_tokens SET teamid = $1, installation = $2 WHERE teamid = $3';
+        updateQuery.value = [`${installation.team.id}`, JSON.stringify(installation), `${installation.team.id}`];
+
+        await db.query (updateQuery, (err, result)=>{
+          try {
+            if (err) throw err;
+            if (result.rowCount > 0){
+              console.log ('Rows affected: ', result.rowCount);
+              return;
+            } else {
+              db.query(insertQuery, (error, res) =>{
+                try {
+                  if (error) throw error;
+                  console.log ('Rows affected:', res.rowCount);
+                }catch(er){
+                  console.log(er);
+                }finally {
+                   //do something here
+                   console.log('finally 1');
                 }
-              ]
-          });
-        } catch (err) {
-          console.log(err.stack)
-        }
+              });
+            }
+          }catch (e){
+            console.log(e);
+          }finally{
+            console.log('finally 2')
+          }
+        });
+        // try {
+          
+        //   // var sql = "INSERT INTO slack_tokens (teamid, installation) VALUES ('" + installation.team.id + "', '" + JSON.stringify(installation) + "')";
+        //   const res = await db.query(sql)
+        //   console.log("The app was installed successfully.");
+          
+        //   //onboarding welcome
+        //   await app.client.chat.postMessage({
+        //     token: installation.bot.token,
+        //     channel: installation.user.id,
+        //     blocks: 
+        //       [
+        //         {
+        //           "type": "section",
+        //           "text": {
+        //             "type": "mrkdwn",
+        //             "text": "Hey there 👋 I'm TJ. I love Trader Joes and am always on top of their new releases."
+        //           }
+        //         },
+        //         {
+        //           "type": "section",
+        //           "text": {
+        //             "type": "mrkdwn",
+        //             "text": "➕ To get the latest and greatest from our boy Joe, *add me to a channel* and I'll introduce myself. I'm usually added to a casual conversation or lunch-based channel. Type `/invite @TJ` from the channel you selected during installation, or pick the channel on the right."
+        //           },
+        //           "accessory": {
+        //             "type": "conversations_select",
+        //             "action_id": "add_tj_to_channel",
+        //             "placeholder": {
+        //               "type": "plain_text",
+        //               "text": "Select a channel...",
+        //               "emoji": true
+        //             }
+        //           }
+        //         },
+        //         {
+        //           "type": "section",
+        //           "text": {
+        //             "type": "mrkdwn",
+        //             "text": "*My other great skill is recommendations*. Once I'm added to a channel, simply ask me `What's good TJ?` or type `/TJ recommend` and I'll recommend some 🔥"
+        //           }
+        //         },
+        //         {
+        //           "type": "image",
+        //           "title": {
+        //             "type": "plain_text",
+        //             "text": "recommendation",
+        //             "emoji": true
+        //           },
+        //           "image_url": "https://tj-slack-app.herokuapp.com/public/recommendation.png",
+        //           "alt_text": "example TJ recommendation"
+        //         },
+        //         {
+        //           "type": "divider"
+        //         },
+        //         {
+        //           "type": "context",
+        //           "elements": [
+        //             {
+        //               "type": "mrkdwn",
+        //               "text": "❓Get help at any time with `/TJ help`"
+        //             }
+        //           ]
+        //         }
+        //       ]
+        //   });
+        // } catch (err) {
+        //   console.log(err.stack)
+        // }
       } else {
         throw new Error('Failed saving installation data to installationStore');
       }
@@ -326,7 +362,7 @@ const helpModal = {
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Send an email to support@timothybauman.com and we'll help you out!"
+				"text": "Send an email to tim@slapps.me and we'll help you out!"
 			}
 		}
 	]
