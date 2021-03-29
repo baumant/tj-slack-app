@@ -269,7 +269,7 @@ app.message('TJ', async ({ message, context }) => {
   }
 });
 
-app.message(/what’*'*s good TJ/i, async ({ say }) => {
+app.message(/what’*'*s good,* TJ/i, async ({ say }) => {
 
   // connect to DB and get latest list of items for recommendation
   try {
