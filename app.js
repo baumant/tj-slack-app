@@ -449,7 +449,7 @@ app.shortcut('tj_help', async ({ shortcut, ack, client }) => {
 customReceiver.app.set('view engine', 'pug');
 
 customReceiver.router.get('/', (req, res) => {
-  res.render('index', { title: "Hey there, I'm TJ!" })
+  res.render('index', { title: "Meet TJ, the Trader Joe's superfan slack bot" })
 });
 
 customReceiver.app.use('/public', express.static('public'));
