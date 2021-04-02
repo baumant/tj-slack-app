@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const db = require('../db');
+const twit = require('./twit.js');
 
 (async () => {
 
@@ -41,6 +42,7 @@ let blocks = [
     "type": "divider"
   }
 ];
+let twitterItems = [];
 
 let scrapeTJ = await axios("https://www.traderjoes.com/digin/category/What's%20New")
   .then((response) => {
@@ -77,7 +79,7 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
         console.log(err.stack)
       }
 
-      // push new items to message blocks
+      // push new items to slack message blocks
       blocks.push(
         {
           "type": "section",
@@ -95,9 +97,18 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
           "type": "divider"
         }
       );
+
+      // push new items to twitter variable
+      twitterItems.push({
+        item_title: item.item_title, 
+        item_url: item.item_url, 
+        item_img_url: item.item_img_url, 
+        item_blurb: item.item_blurb
+      })
     }
   }
 
+  // post to channels where TJ has been installed
   try {
     const res = await db.query('SELECT * FROM slack_tokens')
     // console.log(res.rows);
@@ -118,7 +129,9 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
   } catch (err) {
     console.log(err.stack)
   }
-  
+
+  //post to twitter
+  twit.tweetNewItems(announcementText, twitterItems);
 
 } else {
   console.log('no new items found.');
