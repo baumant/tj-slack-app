@@ -44,18 +44,95 @@ let blocks = [
 ];
 let twitterItems = [];
 
-let scrapeTJ = await axios("https://www.traderjoes.com/digin/category/What's%20New")
-  .then((response) => {
-    const $ = cheerio.load(response.data);
-
-    $('#contentbegin .article:not(.pagination-container)').each(function(index, e){
-        const productUrl = $(e).find('a.no-underline').attr('href');
-        const productTitle = $(e).find('a.no-underline h1').text();
-        const productImage = $(e).find('.image-holder img').attr('src');
-        const productBlurb = $(e).find('p:nth-of-type(3)').text();
-        newItems.unshift({ item_title: productTitle, item_url: productUrl, item_img_url: productImage, item_blurb: productBlurb });
-    });
-
+let scrapeTJ = await axios({
+    url: 'https://www.traderjoes.com/api/graphql',
+    method: 'post',
+    data: {
+      query: `
+          query SearchProducts($currentPage: Int, $pageSize: Int, $storeCode: String = "31", $availability: String = "1", $published: String = "1") {
+            products(
+              filter: {store_code: {eq: $storeCode}, published: {eq: $published}, availability: {match: $availability}, new_product: {match: "1"}}
+              currentPage: $currentPage
+              pageSize: $pageSize
+            ) {
+              items {
+                sku
+                item_title
+                item_story_marketing
+                primary_image
+                other_images
+                published
+                sku
+                url_key
+                name
+                item_description
+                item_title
+                item_characteristics
+                item_story_qil
+                use_and_demo
+                sales_size
+                sales_uom_code
+                sales_uom_description
+                country_of_origin
+                availability
+                new_product
+                promotion
+                category_hierarchy {
+                  id
+                  name
+                  __typename
+                }
+                primary_image
+                sales_size
+                sales_uom_description
+                price_range {
+                  minimum_price {
+                    final_price {
+                      currency
+                      value
+                      __typename
+                    }
+                    __typename
+                  }
+                  __typename
+                }
+                retail_price
+                fun_tags
+                item_characteristics
+                __typename
+              }
+              total_count
+              pageInfo: page_info {
+                currentPage: current_page
+                totalPages: total_pages
+                __typename
+              }
+              aggregations {
+                attribute_code
+                label
+                count
+                options {
+                  label
+                  value
+                  count
+                  __typename
+                }
+                __typename
+              }
+              __typename
+            }
+          }          
+          
+        `
+    }
+  }).then((result) => {
+    console.log(result.data.data.products);
+    let products = result.data.data.products.items;
+    for (let index = 0; index < products.length; index++) {
+      const product = products[index];
+      newItems.unshift({ item_title: product.item_title, item_url: "https://www.traderjoes.com/home/products/pdp/" + product.sku, item_img_url: "https://www.traderjoes.com" + product.primary_image, item_blurb: product.item_story_marketing });
+    }
+    console.log(newItems);
   }).catch((error) => console.log(error));
 
 console.log('scrape completed.');
@@ -85,11 +162,11 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `*<https://www.traderjoes.com${item.item_url}|${item.item_title}>*\n${item.item_blurb}`
+            "text": `*<${item.item_url}|${item.item_title}>*\n${item.item_blurb.substring(0, 500) + "..."}`
           },
           "accessory": {
             "type": "image",
-            "image_url": `https://www.traderjoes.com${item.item_img_url}`,
+            "image_url": `${item.item_img_url}`,
             "alt_text": item.item_title
           }
         },
@@ -103,7 +180,7 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
         item_title: item.item_title, 
         item_url: item.item_url, 
         item_img_url: item.item_img_url, 
-        item_blurb: item.item_blurb
+        item_blurb: item.item_blurb.substring(0, 500) + "..."
       })
     }
   }
@@ -124,8 +201,16 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
         .catch(function (error) {
           console.log(error);
         });
-  
     }
+    
+    // USE FOR TESTING
+    // await axios.post("https://hooks.slack.com/services/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", { "blocks": blocks })
+    //   .then(function (response) {
+    //     console.log(response.status, `posted new item to #lunch`);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   } catch (err) {
     console.log(err.stack)
   }

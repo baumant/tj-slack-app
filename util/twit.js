@@ -22,7 +22,7 @@ const tweetNewItems = async (announcementText, twitterItems) => {
     const twitterItem = twitterItems[index];
     
     user.post('statuses/update', { 
-      status: twitterAnnouncementText + " \nhttps://www.traderjoes.com" + twitterItem.item_url
+      status: twitterAnnouncementText + " \n" + twitterItem.item_url
     }).then(result => {
       console.log('TJ successfully tweeted : "' + result.text + '"');
     }).catch(console.error);
