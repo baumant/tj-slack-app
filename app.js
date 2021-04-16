@@ -177,11 +177,11 @@ app.action('add_tj_to_channel', async ({ action, context, ack, say }) => {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": `*<https://www.traderjoes.com${exampleItem.item_url}|${exampleItem.item_title}>*\n${exampleItem.item_blurb}`
+          "text": `*<${exampleItem.item_url}|${exampleItem.item_title}>*\n${exampleItem.item_blurb.substring(0, 400) + "..."}`
         },
         "accessory": {
           "type": "image",
-          "image_url": `https://www.traderjoes.com${exampleItem.item_img_url}`,
+          "image_url": `${exampleItem.item_img_url}`,
           "alt_text": exampleItem.item_title
         }
       },
@@ -294,11 +294,11 @@ app.message(/what’*'*s good,* TJ/i, async ({ say }) => {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": `*<https://www.traderjoes.com${suggestedItem.item_url}|${suggestedItem.item_title}>*\n${suggestedItem.item_blurb}`
+          "text": `*<${suggestedItem.item_url}|${suggestedItem.item_title}>*\n${suggestedItem.item_blurb.substring(0, 400) + "..."}`
         },
         "accessory": {
           "type": "image",
-          "image_url": `https://www.traderjoes.com${suggestedItem.item_img_url}`,
+          "image_url": `${suggestedItem.item_img_url}`,
           "alt_text": suggestedItem.item_title
         }
       }
@@ -403,11 +403,11 @@ app.command('/tj', async ({ command, ack, say, context }) => {
             "type": "section",
             "text": {
               "type": "mrkdwn",
-              "text": `*<https://www.traderjoes.com${suggestedItem.item_url}|${suggestedItem.item_title}>*\n${suggestedItem.item_blurb}`
+              "text": `*<${suggestedItem.item_url}|${suggestedItem.item_title}>*\n${suggestedItem.item_blurb.substring(0, 400) + "..."}`
             },
             "accessory": {
               "type": "image",
-              "image_url": `https://www.traderjoes.com${suggestedItem.item_img_url}`,
+              "image_url": `${suggestedItem.item_img_url}`,
               "alt_text": suggestedItem.item_title
             }
           }
