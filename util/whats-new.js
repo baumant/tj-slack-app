@@ -49,7 +49,7 @@ let scrapeTJ = await axios({
     method: 'post',
     data: {
       query: `
-          query SearchProducts($currentPage: Int, $pageSize: Int, $storeCode: String = "31", $availability: String = "1", $published: String = "1") {
+          query SearchProducts($currentPage: Int, $pageSize: Int = 256, $storeCode: String = "31", $availability: String = "1", $published: String = "1") {
             products(
               filter: {store_code: {eq: $storeCode}, published: {eq: $published}, availability: {match: $availability}, new_product: {match: "1"}}
               currentPage: $currentPage
@@ -64,16 +64,6 @@ let scrapeTJ = await axios({
                 published
                 sku
                 url_key
-                name
-                item_description
-                item_title
-                item_characteristics
-                item_story_qil
-                use_and_demo
-                sales_size
-                sales_uom_code
-                sales_uom_description
-                country_of_origin
                 availability
                 new_product
                 promotion
@@ -85,41 +75,10 @@ let scrapeTJ = await axios({
                 primary_image
                 sales_size
                 sales_uom_description
-                price_range {
-                  minimum_price {
-                    final_price {
-                      currency
-                      value
-                      __typename
-                    }
-                    __typename
-                  }
-                  __typename
-                }
                 retail_price
-                fun_tags
-                item_characteristics
                 __typename
               }
               total_count
-              pageInfo: page_info {
-                currentPage: current_page
-                totalPages: total_pages
-                __typename
-              }
-              aggregations {
-                attribute_code
-                label
-                count
-                options {
-                  label
-                  value
-                  count
-                  __typename
-                }
-                __typename
-              }
-              __typename
             }
           }          
           
