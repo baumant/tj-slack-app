@@ -202,15 +202,6 @@ if(lastRun.findIndex(lastRunItem => lastRunItem.item_title === newItems[newItems
           console.log(error);
         });
     }
-    
-    // USE FOR TESTING
-    // await axios.post("https://hooks.slack.com/services/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", { "blocks": blocks })
-    //   .then(function (response) {
-    //     console.log(response.status, `posted new item to #lunch`);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
   } catch (err) {
     console.log(err.stack)
   }
