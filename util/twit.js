@@ -50,5 +50,51 @@ const slackToUnicode = (text) => {
   return new_text;
 }
 
+const client = new Twitter({
+  version: "2",
+  extension: false,
+  consumer_key: process.env.TWITTER_API_KEY,
+  consumer_secret: process.env.TWITTER_API_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN,  
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
+
+const likeFollowRecentTJTweets = async () => {
+  console.log('TJ is searching latest tweets');
+
+  user
+  .get("account/verify_credentials")
+  .then(results => {
+    const TJid = results.id;
+
+    client.get('tweets/search/recent', {
+      "query": "trader joe's -is:retweet -is:reply",
+      "max_results": "100",
+      "tweet.fields": "public_metrics",
+      "expansions": "author_id"
+    }).then(result => {
+      const risingTweets = result.data.filter(tweet => (tweet.public_metrics.like_count > 2));
+      console.log(risingTweets);
+      console.log(risingTweets.length + " interesting tweets, throwing them a like & follow");
+
+      for (let index = 0; index < risingTweets.length; index++) {
+        const tweetID = risingTweets[index].id;
+        user.post(`favorites/create`, {
+          "id": tweetID,
+        }).then(result => {
+          console.log("favorited: " + result.favorited, result.text);
+        }).catch((error) => { console.log(error.errors); });
+
+        user.post('friendships/create', { "user_id": risingTweets[index].author_id }).then(result => {
+          console.log("followed " + result.screen_name);
+        }).catch((error) => { console.log(error.errors); });
+      }
+    }).catch(console.error);
+
+  })
+  .catch(console.error);
+};
+
+exports.likeFollowRecentTJTweets = likeFollowRecentTJTweets;
 exports.tweetNewItems = tweetNewItems;
 

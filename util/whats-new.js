@@ -1,5 +1,4 @@
 const axios = require("axios");
-const cheerio = require("cheerio");
 const db = require('../db');
 const twit = require('./twit.js');
 
