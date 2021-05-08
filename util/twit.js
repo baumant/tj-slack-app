@@ -74,7 +74,6 @@ const likeFollowRecentTJTweets = async () => {
       "expansions": "author_id"
     }).then(result => {
       const risingTweets = result.data.filter(tweet => (tweet.public_metrics.like_count > 2));
-      console.log(risingTweets);
       console.log(risingTweets.length + " interesting tweets, throwing them a like & follow");
 
       for (let index = 0; index < risingTweets.length; index++) {
